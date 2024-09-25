@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>turtlebot3_datasets</name>
+  <name>irobo</name>
   <version>0.0.1</version>
   <description>Datasets to be used with turtlebot3 waffle pi</description>
 
@@ -21,7 +21,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/turtlebot3_datasets</url> -->
+  <!-- <url type="website">http://wiki.ros.org/irobo</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
