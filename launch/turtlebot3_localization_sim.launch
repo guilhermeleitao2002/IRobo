@@ -2,7 +2,7 @@
 <launch>
   <!-- Arguments -->
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
-  <arg name="map_file" default="$(find turtlebot3_datasets)/data/map.yaml"/>
+  <arg name="map_file" default="$(find irobo)/data/map.yaml"/>
   <arg name="move_forward_only" default="false"/>
 
   <!-- Map server -->
@@ -15,7 +15,7 @@
 
   <!-- ROSBAG -->
   <param name="/use_sim_time" value="true"/>
-  <node pkg="rosbag" type="play" name="rosbag_player" args="--clock $(find turtlebot3_datasets)/data/fixed_slam_easy.bag"/>
+  <node pkg="rosbag" type="play" name="rosbag_player" args="--clock $(find irobo)/data/fixed_slam_easy.bag"/>
 
   <!-- ekf_localization_node -->
   <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node_odom" clear_params="true">
@@ -113,7 +113,7 @@
   </node>
     
   <!-- rviz -->
-  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot3_datasets)/rviz/turtlebot3_visualize_localization_sim.rviz" />
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz" />
 
   <!-- static tf publisher for ground truth -->
   <node pkg="turtlebot3_datasets" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="screen"/>
