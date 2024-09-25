@@ -116,9 +116,9 @@
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz" />
 
   <!-- static tf publisher for ground truth -->
-  <node pkg="turtlebot3_datasets" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="screen"/>
+  <node pkg="irobo" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="screen"/>
 
   <!-- run error script -->
-  <node pkg="turtlebot3_datasets" type="calculate_error.py" name="calculate_error" output="screen"/>
+  <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/>
 
 </launch>

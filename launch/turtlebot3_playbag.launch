@@ -15,7 +15,7 @@
   <!-- ROSBAG -->
   <param name="/use_sim_time" value="true"/>
   <node pkg="rosbag" type="play" name="rosbag_player" 
-          args="--clock $(find turtlebot3_datasets)/data/$(arg bag_name).bag"/>
+          args="--clock $(find irobo)/data/$(arg bag_name).bag"/>
 
   <!-- EKF robot localization -->
 
