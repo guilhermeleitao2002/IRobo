@@ -4,6 +4,7 @@
   <arg name="map_file" default="$(find irobo)/data/turtle_map.yaml"/>
   <arg name="open_rviz" default="true"/>
   <arg name="move_forward_only" default="false"/>
+  <arg name="rate" default="1"/>
 
   <!-- Map server -->
   <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
@@ -17,7 +18,7 @@
   <include file="$(find irobo)/launch/amcl.launch"/>
 
   <!-- move_base -->
-  <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+  <include file="$(find irobo)/launch/move_base.launch">
     <arg name="model" value="$(arg model)" />
     <arg name="move_forward_only" value="$(arg move_forward_only)"/>
   </include>
@@ -39,5 +40,9 @@
     <node pkg="rviz" type="rviz" name="rviz" required="true"
           args="-d $(find irobo)/rviz/turtlebot3_navigation.rviz"/>
   </group>
+
+  <!-- Make initial distribution linear, i.e. distributed evenly across the map -->
+  <!-- Comment out to apply Gaussian initial distribution, i.e. distributed heavely around the most likely place of birth -->
+  <node pkg="rosservice" type="rosservice" name="global_localization_call" args="call /global_localization" />
 
 </launch>
