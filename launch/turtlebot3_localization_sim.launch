@@ -44,17 +44,6 @@
     </rosparam>
     <param name="odom0_relative" value="false"/>
 
-    <param name="mocap0" value="mocap_laser_link" />
-    <rosparam param="mocap0_config">
-      [true,  true,  true,    <!-- x, y, z position -->
-      true, false, false,   <!-- roll, pitch, yaw -->
-      true,  true,  true,    <!-- x, y, z velocity -->
-      false, false, true,    <!-- roll, pitch, yaw velocity -->
-      false, false, false,   <!-- accelerations -->
-      false, false, false]
-    </rosparam>
-    <param name="mocap0_relative" value="false"/>
-
     <param name="imu0" value="imu" />
     <rosparam param="imu0_config">
       [false, false, false,
@@ -66,8 +55,8 @@
     <param name="imu0_relative" value="true"/>
 
     <rosparam param="initial_estimate_covariance">
-      [1e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
-      0, 1e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
+      [1e-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
+      0, 1e-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Position z:              We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll:                    We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch:                   We assume no movement in this axis -->
@@ -83,18 +72,18 @@
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Linear Acceleration z:   We assume no movement in this axis -->
     </rosparam>
     <rosparam param="process_noise_covariance">
-      [1e-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
-      0, 1e-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
+      [0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
+      0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Position z:              We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll:                    We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch:                   We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 1e-3, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
-      0, 0, 0, 0, 0, 0, 1e-3, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity x -->
-      0, 0, 0, 0, 0, 0, 0, 1e-3, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity y -->
+      0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
+      0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity x -->
+      0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity y -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Velocity z:       We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity roll:   We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity pitch:  We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-3, 0, 0, 0,   <!-- Angular Velocity yaw -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0,   <!-- Angular Velocity yaw -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration x -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration y -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Linear Acceleration z:   We assume no movement in this axis -->
@@ -107,6 +96,21 @@
        0.0, 0.0, 0.0,
        0.0, 0.0, 0.0]
     </rosparam>
+
+    <!-- Ground Truth Pose Input -->
+    <param name="pose0" value="/ground_truth_pose" />
+    <rosparam param="pose0_config">
+      [true, true, true,    <!-- x, y, z -->
+      true, true, true,    <!-- roll, pitch, yaw -->
+      false, false, false, <!-- vx, vy, vz -->
+      false, false, false, <!-- vroll, vpitch, vyaw -->
+      false, false, false] <!-- ax, ay, az -->
+    </rosparam>
+    <param name="pose0_differential" value="false" />
+    <param name="pose0_relative" value="false" />
+    <param name="pose0_queue_size" value="10" />
+    <param name="pose0_rejection_threshold" value="2" />
+    <param name="pose0_twist_covariance" value="false" />
   </node>
 
   <!-- Add Hector Trajectory Server to visualize the path -->
@@ -132,6 +136,9 @@
 
   <!-- static tf publisher for ground truth -->
   <node pkg="irobo" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="screen"/>
+
+  <!-- Ground Truth Publisher Node -->
+  <node pkg="irobo" type="publish_ground_truth.py" name="publish_ground_truth" output="screen"/>
 
   <!-- run error script -->
   <!-- <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/> -->
