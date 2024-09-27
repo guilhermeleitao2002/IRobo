@@ -35,22 +35,36 @@
     dot_x,dot_y,dot_z,
     dot_roll,dot_pitch,dot_yaw,
     ddot_x, ddot_y, ddot_z
-
     <rosparam param="odom0_config">
       [false, false, false,
        false, false, false,
        true, true, false,
        false, false, true,
-       false, false, false]</rosparam>
+       false, false, false]
+    </rosparam>
     <param name="odom0_relative" value="false"/>
+
+    <param name="mocap0" value="mocap_laser_link" />
+    <rosparam param="mocap0_config">
+      [true,  true,  true,    <!-- x, y, z position -->
+      true, false, false,   <!-- roll, pitch, yaw -->
+      true,  true,  true,    <!-- x, y, z velocity -->
+      false, false, true,    <!-- roll, pitch, yaw velocity -->
+      false, false, false,   <!-- accelerations -->
+      false, false, false]
+    </rosparam>
+    <param name="mocap0_relative" value="false"/>
+
     <param name="imu0" value="imu" />
     <rosparam param="imu0_config">
       [false, false, false,
        false, false, true,
        false, false, false,
        false, false, false,
-       false, false, false]</rosparam>
+       false, false, false]
+    </rosparam>
     <param name="imu0_relative" value="true"/>
+
     <rosparam param="initial_estimate_covariance">
       [1e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
       0, 1e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
@@ -93,7 +107,6 @@
        0.0, 0.0, 0.0,
        0.0, 0.0, 0.0]
     </rosparam>
-
   </node>
 
   <!-- Add Hector Trajectory Server to visualize the path -->
@@ -122,5 +135,4 @@
 
   <!-- run error script -->
   <!-- <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/> -->
-
 </launch>
