@@ -77,7 +77,7 @@ try:
             eucl = get_errors(t)
             sum_errors += eucl
             num_errors += 1
-            error_list.append(eucl)
+            error_list.append(eucl*1e3)
             # rospy.loginfo('Error (in mm): {:.2f}'.format(eucl * 1e3))
 
         try:
@@ -85,14 +85,14 @@ try:
         except rospy.exceptions.ROSTimeMovedBackwardsException as e:
             rospy.logwarn(e)
         except rospy.exceptions.ROSInterruptException:
-            print('Average error (in mm): {:.2f}'.format(sum_errors / num_errors * 1e3))
+            print('Average error (in mm): {:.2f}'.format(sum_errors/num_errors*1e3))
             # After shutdown, plot the errors
             if error_list:
                 plt.figure()
                 plt.plot(error_list)
                 plt.title('Euclidean Errors Over Time')
                 plt.xlabel('Time steps')
-                plt.ylabel('Error (m)')
+                plt.ylabel('Error (mm)')
                 plt.grid(True)
                 plt.show()
             exit(0)

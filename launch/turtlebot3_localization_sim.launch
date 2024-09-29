@@ -20,7 +20,7 @@
   <!-- ekf_localization_node -->
   <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node_odom" clear_params="true">
     <!-- Comment out the frequency to ensure maximum available frequency -->
-    <!-- <param name="frequency" value="10." /> -->
+    <param name="frequency" value="10." />
     <param name="sensor_timeout" value="0.2" />
     <param name="two_d_mode" value="true" />
     <param name="publish_tf" value="true" />
@@ -43,6 +43,7 @@
        false, false, false]
     </rosparam>
     <param name="odom0_relative" value="false"/>
+    <param name="odom0_differential" value="false"/>
 
     <param name="imu0" value="imu" />
     <rosparam param="imu0_config">
@@ -53,37 +54,21 @@
        false, false, false]
     </rosparam>
     <param name="imu0_relative" value="true"/>
+    <param name="imu0_differential" value="false"/>
 
-    <rosparam param="initial_estimate_covariance">
-      [1e-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
-      0, 1e-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Position z:              We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll:                    We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch:                   We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Yaw -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Velocity x -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Velocity y -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Velocity z:       We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity roll:   We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity pitch:  We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity yaw -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration x -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration y -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Linear Acceleration z:   We assume no movement in this axis -->
-    </rosparam>
     <rosparam param="process_noise_covariance">
-      [0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
-      0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Position z:              We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll:                    We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch:                   We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
-      0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity x -->
-      0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity y -->
+      [1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
+      0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
+      0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position z:              We assume no movement in this axis -->
+      0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Roll:                    We assume no movement in this axis -->
+      0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Pitch:                   We assume no movement in this axis -->
+      0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
+      0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity x -->
+      0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity y -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Velocity z:       We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity roll:   We assume no movement in this axis -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity pitch:  We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0,   <!-- Angular Velocity yaw -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0,   <!-- Angular Velocity yaw -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration x -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration y -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Linear Acceleration z:   We assume no movement in this axis -->
@@ -97,14 +82,13 @@
        0.0, 0.0, 0.0]
     </rosparam>
 
-    <!-- Ground Truth Pose Input -->
     <param name="pose0" value="/ground_truth_pose" />
     <rosparam param="pose0_config">
-      [true, true, true,    <!-- x, y, z -->
-      true, true, true,    <!-- roll, pitch, yaw -->
-      false, false, false, <!-- vx, vy, vz -->
-      false, false, false, <!-- vroll, vpitch, vyaw -->
-      false, false, false] <!-- ax, ay, az -->
+      [true, true, true,        <!-- x, y, z -->
+       true, true, true,        <!-- roll, pitch, yaw -->
+       false, false, false,     <!-- dot_x, dot_y, dot_z -->
+       false, false, false,     <!-- dot_roll, dot_pitch, dot_yaw -->
+       false, false, false]     <!-- ddot_x, ddot_y, ddot_z -->
     </rosparam>
     <param name="pose0_differential" value="false" />
     <param name="pose0_relative" value="false" />
@@ -129,10 +113,7 @@
     <remap from="/trajectory" to="/trajectory_mocap_laser_link" />
     <param name="trajectory_update_rate" value="30.0" />
     <param name="trajectory_publish_rate" value="30.0" />
-  </node>
-    
-  <!-- rviz -->
-  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz" />
+  </node>    
 
   <!-- static tf publisher for ground truth -->
   <node pkg="irobo" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="screen"/>
@@ -142,4 +123,7 @@
 
   <!-- run error script -->
   <!-- <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/> -->
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz" />
 </launch>
