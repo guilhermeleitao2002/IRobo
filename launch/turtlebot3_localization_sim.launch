@@ -112,7 +112,7 @@
     <remap from="/trajectory" to="/trajectory_mocap_laser_link" />
     <param name="trajectory_update_rate" value="30.0" />
     <param name="trajectory_publish_rate" value="30.0" />
-  </node>    
+  </node>
 
   <!-- static tf publisher for ground truth -->
   <node pkg="irobo" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="screen"/>
@@ -121,7 +121,7 @@
   <node pkg="irobo" type="publish_ground_truth.py" name="publish_ground_truth" output="screen"/>
 
   <!-- run error script -->
-  <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/>
+  <!-- <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/> -->
 
   <!-- rviz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz" />
