@@ -19,7 +19,6 @@
 
   <!-- ekf_localization_node -->
   <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node_odom" clear_params="true">
-    <!-- Comment out the frequency to ensure maximum available frequency -->
     <param name="frequency" value="10." />
     <param name="sensor_timeout" value="0.2" />
     <param name="two_d_mode" value="true" />
@@ -57,21 +56,21 @@
     <param name="imu0_differential" value="false"/>
 
     <rosparam param="process_noise_covariance">
-      [1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- Position x -->
-      0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position y -->
-      0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Position z:              We assume no movement in this axis -->
-      0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Roll:                    We assume no movement in this axis -->
-      0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Pitch:                   We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
-      0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity x -->
-      0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0,   <!-- Linear Velocity y -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Velocity z:       We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity roll:   We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Angular Velocity pitch:  We assume no movement in this axis -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0,   <!-- Angular Velocity yaw -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration x -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Linear Acceleration y -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Linear Acceleration z:   We assume no movement in this axis -->
+      [1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     </rosparam>
 
     <rosparam param="initial_state">
@@ -122,7 +121,7 @@
   <node pkg="irobo" type="publish_ground_truth.py" name="publish_ground_truth" output="screen"/>
 
   <!-- run error script -->
-  <!-- <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/> -->
+  <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/>
 
   <!-- rviz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz" />

@@ -5,6 +5,7 @@ import sys
 import argparse
 import numpy
 from tf2_ros import Buffer, TransformListener
+from nav_msgs.msg import Odometry
 import matplotlib.pyplot as plt
 
 class TransformHandler():
@@ -17,19 +18,6 @@ class TransformHandler():
         self.tf_buffer = Buffer(cache_time=rospy.Duration(max_time_between))
         self.__tf_listener = TransformListener(self.tf_buffer)
 
-        #self.warn_timer = rospy.Timer(rospy.Duration(5), self.__warn_timer_cb)
-
-    def __warn_timer_cb(self, evt):
-
-        available_frames = self.tf_buffer.all_frames_as_string()
-        avail = True
-        for frame in self.frames:
-            if frame not in available_frames:
-                rospy.logwarn('Frame {} has not been seen yet'.format(frame))
-                avail = False
-        if avail:
-            self.warn_timer.shutdown()
-
     def get_transform(self, fixed_frame, target_frame):
         # caller should handle the exceptions
         return self.tf_buffer.lookup_transform(target_frame, fixed_frame, rospy.Time(0))
@@ -37,7 +25,20 @@ class TransformHandler():
 
 def get_errors(transform):
     tr = transform.transform.translation
-    return numpy.linalg.norm( [tr.x, tr.y] )
+    return numpy.linalg.norm([tr.x, tr.y])
+
+def odometry_callback(msg):
+    # Extract position covariance from the Odometry message (3x3 diagonal values)
+    cov_x = msg.pose.covariance[0]   # Covariance for X
+    cov_y = msg.pose.covariance[7]   # Covariance for Y
+    cov_z = msg.pose.covariance[14]  # Covariance for Z
+
+    # Combine covariances (you can modify this if necessary)
+    combined_covariance = numpy.sqrt(cov_x + cov_y)  # Standard deviation from covariance sum
+
+    # Append to covariance list
+    covariance_list.append(combined_covariance)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--gt_frame', help='The child frame of the GT transform', default='mocap_laser_link')
@@ -50,6 +51,10 @@ est_frame = args.est_frame
 
 rospy.init_node('evaluation_node')
 
+# Subscribe to the Odometry topic
+covariance_list = []
+rospy.Subscriber('/odometry/filtered', Odometry, odometry_callback)
+
 if rospy.rostime.is_wallclock():
     rospy.logfatal('You should be using simulated time: rosparam set use_sim_time true')
     sys.exit(1)
@@ -57,7 +62,7 @@ if rospy.rostime.is_wallclock():
 rospy.loginfo('Waiting for clock')
 rospy.sleep(0.00001)
 
-handler = TransformHandler(gt_frame, est_frame, max_time_between=20) # 500ms
+handler = TransformHandler(gt_frame, est_frame, max_time_between=20)  # 500ms
 
 rospy.loginfo('Listening to frames and computing error, press Ctrl-C to stop')
 sleeper = rospy.Rate(1000)
@@ -74,27 +79,36 @@ try:
         except Exception as e:
             rospy.logwarn(e)
         else:
+            # Calculate Euclidean error
             eucl = get_errors(t)
             sum_errors += eucl
             num_errors += 1
-            error_list.append(eucl*1e3)
-            # rospy.loginfo('Error (in mm): {:.2f}'.format(eucl * 1e3))
+            error_list.append(eucl * 1e3)  # Error in mm
 
         try:
             sleeper.sleep()
         except rospy.exceptions.ROSTimeMovedBackwardsException as e:
             rospy.logwarn(e)
         except rospy.exceptions.ROSInterruptException:
-            print('Average error (in mm): {:.2f}'.format(sum_errors/num_errors*1e3))
-            # After shutdown, plot the errors
-            if error_list:
+            print('Average error (in mm): {:.2f}'.format(sum_errors / num_errors * 1e3))
+
+            # After shutdown, plot the errors and covariances
+            if error_list and covariance_list:
                 plt.figure()
-                plt.plot(error_list)
-                plt.title('Euclidean Errors Over Time')
-                plt.xlabel('Time steps')
-                plt.ylabel('Error (mm)')
+
+                # Plot error
+                plt.plot(error_list, label="Error", color='green')
+
+                # Plot uncertainty (from odometry covariance data)
+                plt.plot(covariance_list, label="Uncertainty (Standard Deviation)", color='red')
+
+                plt.title('Error Fluctuation Along the Path and its Uncertainty')
+                plt.xlabel('Messages Received')
+                plt.ylabel('Error (m)')
                 plt.grid(True)
+                plt.legend()
                 plt.show()
+
             exit(0)
 
 except rospy.exceptions.ROSInterruptException:
