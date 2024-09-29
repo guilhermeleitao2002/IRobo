@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 import tf2_ros
-import geometry_msgs.msg
+from geometry_msgs.msg import TransformStamped
 
 def main():
     rospy.init_node('tf2_mocap_to_odom')
@@ -11,7 +11,7 @@ def main():
     rate = rospy.Rate(1)  # 1 Hz
 
     while not rospy.is_shutdown():
-        t = geometry_msgs.msg.TransformStamped()
+        t = TransformStamped()
 
         t.header.stamp = rospy.Time.now()
         t.header.frame_id = "mocap"
