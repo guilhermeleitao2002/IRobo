@@ -43,6 +43,6 @@
 
   <!-- Make initial distribution linear, i.e. distributed evenly across the map -->
   <!-- Comment out to apply Gaussian initial distribution, i.e. distributed heavely around the most likely place of birth -->
-  <!-- <node pkg="rosservice" type="rosservice" name="global_localization_call" args="call /global_localization" /> -->
+  <node pkg="rosservice" type="rosservice" name="global_localization_call" args="call /global_localization" />
 
 </launch>

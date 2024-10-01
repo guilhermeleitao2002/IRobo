@@ -12,6 +12,8 @@ def main():
 
     pub = rospy.Publisher('/ground_truth_pose', PoseWithCovarianceStamped, queue_size=10)
 
+    rate = rospy.Rate(1)  # 1 Hz
+
     while not rospy.is_shutdown():
         try:
             # Lookup the transformation from 'map' to 'mocap_laser_link'
@@ -39,9 +41,12 @@ def main():
             # Publish the pose
             pub.publish(pose_msg)
 
+
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             rospy.logwarn_throttle(5, "Transformation from 'map' to 'mocap_laser_link' not available.")
             pass
+        
+        rate.sleep()
 
 if __name__ == '__main__':
     try:

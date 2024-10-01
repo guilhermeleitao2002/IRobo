@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /TF1/Frames1
         - /TF1/Tree1
+        - /LaserScan1
         - /Global Map1/Costmap1
         - /Global Map1/Planner1
         - /Local Map1/Polygon1
@@ -161,7 +162,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.030000001192092896
+      Size (m): 0.10000000149011612
       Style: Flat Squares
       Topic: /scan
       Unreliable: false
@@ -297,7 +298,7 @@ Visualization Manager:
           Topic: /move_base/NavfnROS/plan
           Unreliable: false
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Local Map
     - Alpha: 1
       Arrow Length: 0.05000000074505806
@@ -389,7 +390,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 86.59381103515625
+      Scale: 86.0425033569336
       Target Frame: <Fixed Frame>
       X: 0
       Y: 0

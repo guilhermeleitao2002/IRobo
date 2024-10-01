@@ -8,8 +8,6 @@ def main():
 
     br = tf2_ros.TransformBroadcaster()
 
-    rate = rospy.Rate(1)  # 1 Hz
-
     while not rospy.is_shutdown():
         t = TransformStamped()
 
@@ -29,8 +27,6 @@ def main():
         t.transform.rotation.w = 0.676
 
         br.sendTransform(t)
-
-        rate.sleep()
 
 if __name__ == '__main__':
     try:

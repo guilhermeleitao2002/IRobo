@@ -1,6 +1,6 @@
 <!-- -->
 <launch>
-  <!-- Arguments -->
+    <!-- Arguments -->
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="map_file" default="$(find irobo)/data/map.yaml"/>
   <arg name="move_forward_only" default="false"/>
@@ -56,21 +56,21 @@
     <param name="imu0_differential" value="false"/>
 
     <rosparam param="process_noise_covariance">
-      [1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      [1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- X position -->
+      0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Y position -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Z position -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch -->
+      0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
+      0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- X velocity -->   
+      0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0,   <!-- Y velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Z velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0,   <!-- Yaw velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- X acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Y acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Z acceleration -->
     </rosparam>
 
     <rosparam param="initial_state">
@@ -115,14 +115,14 @@
   </node>
 
   <!-- static tf publisher for ground truth -->
-  <node pkg="irobo" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="screen"/>
+  <node pkg="irobo" type="static_tf_publisher.py" name="tf2_mocap_to_odom" output="log"/>
 
   <!-- Ground Truth Publisher Node -->
-  <node pkg="irobo" type="publish_ground_truth.py" name="publish_ground_truth" output="screen"/>
+  <node pkg="irobo" type="publish_ground_truth.py" name="publish_ground_truth" output="log"/>
 
   <!-- run error script -->
-  <!-- <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/> -->
+  <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/>
 
   <!-- rviz -->
-  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz" />
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz"/>
 </launch>

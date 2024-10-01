@@ -9,7 +9,6 @@ from nav_msgs.msg import Odometry
 import matplotlib.pyplot as plt
 
 class TransformHandler():
-
     def __init__(self, gt_frame, est_frame, max_time_between=0.01):
         self.gt_frame = gt_frame
         self.est_frame = est_frame
@@ -27,19 +26,6 @@ def get_errors(transform):
     tr = transform.transform.translation
     return numpy.linalg.norm([tr.x, tr.y])
 
-def odometry_callback(msg):
-    # Extract position covariance from the Odometry message (3x3 diagonal values)
-    cov_x = msg.pose.covariance[0]   # Covariance for X
-    cov_y = msg.pose.covariance[7]   # Covariance for Y
-    cov_z = msg.pose.covariance[14]  # Covariance for Z
-
-    # Combine covariances (you can modify this if necessary)
-    combined_covariance = numpy.sqrt(cov_x + cov_y)  # Standard deviation from covariance sum
-
-    # Append to covariance list
-    covariance_list.append(combined_covariance)
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--gt_frame', help='The child frame of the GT transform', default='mocap_laser_link')
 parser.add_argument('--est_frame', help='The child frame of the estimation transform', default='base_scan')
@@ -50,10 +36,6 @@ gt_frame = args.gt_frame
 est_frame = args.est_frame
 
 rospy.init_node('evaluation_node')
-
-# Subscribe to the Odometry topic
-covariance_list = []
-rospy.Subscriber('/odometry/filtered', Odometry, odometry_callback)
 
 if rospy.rostime.is_wallclock():
     rospy.logfatal('You should be using simulated time: rosparam set use_sim_time true')
@@ -72,6 +54,31 @@ num_errors = 0.0
 # List to store errors for plotting
 error_list = []
 
+# Setup live plotting
+plt.ion()  # Enable interactive mode
+fig, ax = plt.subplots()
+line, = ax.plot([], [], label="Error", color='green')  # Initialize plot with empty data
+
+# Set up plot labels and grid
+ax.set_title('Error Fluctuation Along the Path and its Uncertainty')
+ax.set_xlabel('Messages Received')
+ax.set_ylabel('Error (mm)')
+ax.grid(True)
+ax.legend()
+
+def update_plot():
+    """Update the plot with current data in error_list."""
+    line.set_xdata(range(len(error_list)))
+    line.set_ydata(error_list)
+    
+    # Adjust plot limits dynamically
+    ax.relim()
+    ax.autoscale_view()
+    
+    # Redraw the plot
+    plt.draw()
+    plt.pause(0.01)  # Short pause to allow the plot to update
+
 try:
     while not rospy.is_shutdown():
         try:
@@ -85,6 +92,9 @@ try:
             num_errors += 1
             error_list.append(eucl * 1e3)  # Error in mm
 
+            # Update the plot live
+            update_plot()
+
         try:
             sleeper.sleep()
         except rospy.exceptions.ROSTimeMovedBackwardsException as e:
@@ -92,22 +102,9 @@ try:
         except rospy.exceptions.ROSInterruptException:
             print('Average error (in mm): {:.2f}'.format(sum_errors / num_errors * 1e3))
 
-            # After shutdown, plot the errors and covariances
-            if error_list and covariance_list:
-                plt.figure()
-
-                # Plot error
-                plt.plot(error_list, label="Error", color='green')
-
-                # Plot uncertainty (from odometry covariance data)
-                plt.plot(covariance_list, label="Uncertainty (Standard Deviation)", color='red')
-
-                plt.title('Error Fluctuation Along the Path and its Uncertainty')
-                plt.xlabel('Messages Received')
-                plt.ylabel('Error (m)')
-                plt.grid(True)
-                plt.legend()
-                plt.show()
+            # After shutdown, plot the final error list
+            plt.ioff()  # Disable interactive mode
+            plt.show()  # Show final plot
 
             exit(0)
 
