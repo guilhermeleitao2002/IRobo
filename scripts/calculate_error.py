@@ -3,7 +3,7 @@
 import rospy
 import sys
 import argparse
-import numpy
+import numpy as np
 from tf2_ros import Buffer, TransformListener
 from nav_msgs.msg import Odometry
 import matplotlib.pyplot as plt
@@ -21,10 +21,20 @@ class TransformHandler():
         # caller should handle the exceptions
         return self.tf_buffer.lookup_transform(target_frame, fixed_frame, rospy.Time(0))
 
-
 def get_errors(transform):
     tr = transform.transform.translation
-    return numpy.linalg.norm([tr.x, tr.y])
+    return np.linalg.norm([tr.x, tr.y])
+
+def get_covariance(data):
+    # Access the covariance matrix
+    covariance_matrix = data.pose.covariance
+
+    # Extract the relevant variance element for the dimension
+    var_i = covariance_matrix[0]  # Diagonal element for dimension i
+
+    # Calculate the standard deviation (uncertainty) for the dimension
+    uncertainty_i = np.sqrt(var_i)
+    return uncertainty_i
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--gt_frame', help='The child frame of the GT transform', default='mocap_laser_link')
@@ -49,27 +59,34 @@ handler = TransformHandler(gt_frame, est_frame, max_time_between=20)  # 500ms
 rospy.loginfo('Listening to frames and computing error, press Ctrl-C to stop')
 sleeper = rospy.Rate(1000)
 sum_errors = 0.0
+sum_uncertainty = 0.0
 num_errors = 0.0
+num_uncertainty = 0.0
 
-# List to store errors for plotting
+# List to store errors and uncertainties for plotting
 error_list = []
+uncertainty_list = []
 
 # Setup live plotting
 plt.ion()  # Enable interactive mode
 fig, ax = plt.subplots()
-line, = ax.plot([], [], label="Error", color='green')  # Initialize plot with empty data
+line_error, = ax.plot([], [], label="Error (mm)", color='green')  # Initialize plot for error
+line_uncertainty, = ax.plot([], [], label="Uncertainty (mm)", color='red')  # Initialize plot for uncertainty
 
 # Set up plot labels and grid
-ax.set_title('Error Fluctuation Along the Path and its Uncertainty')
+ax.set_title('Error and Uncertainty Over Time')
 ax.set_xlabel('Messages Received')
-ax.set_ylabel('Error (mm)')
+ax.set_ylabel('Error / Uncertainty (mm)')
 ax.grid(True)
 ax.legend()
 
 def update_plot():
-    """Update the plot with current data in error_list."""
-    line.set_xdata(range(len(error_list)))
-    line.set_ydata(error_list)
+    """Update the plot with current data in error_list and uncertainty_list."""
+    line_error.set_xdata(range(len(error_list)))
+    line_error.set_ydata(error_list)
+
+    line_uncertainty.set_xdata(range(len(uncertainty_list)))
+    line_uncertainty.set_ydata(uncertainty_list)
     
     # Adjust plot limits dynamically
     ax.relim()
@@ -78,6 +95,16 @@ def update_plot():
     # Redraw the plot
     plt.draw()
     plt.pause(0.01)  # Short pause to allow the plot to update
+
+def callback(odom_msg):
+    # Extract covariance and compute uncertainty
+    uncertainty = get_covariance(odom_msg)
+    sum_uncertainty += uncertainty
+    num_uncertainty += 1
+    uncertainty_list.append(uncertainty * 1e3)  # Uncertainty in mm
+
+# Subscribe to the odometry topic to get covariance
+rospy.Subscriber('/odometry/filtered', Odometry, callback)
 
 try:
     while not rospy.is_shutdown():
@@ -101,8 +128,9 @@ try:
             rospy.logwarn(e)
         except rospy.exceptions.ROSInterruptException:
             print('Average error (in mm): {:.2f}'.format(sum_errors / num_errors * 1e3))
+            print('Average uncertainty (in mm): {:.2f}'.format(sum_uncertainty / num_uncertainty * 1e3))
 
-            # After shutdown, plot the final error list
+            # After shutdown, plot the final error and uncertainty list
             plt.ioff()  # Disable interactive mode
             plt.show()  # Show final plot
 
