@@ -73,20 +73,20 @@
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Z acceleration -->
     </rosparam>
     <rosparam param="process_noise_covariance">
-      [1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- X position -->
-      0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Y position -->
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- X position -->
+      0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Y position -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Z position -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch -->
-      0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
-      0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- X velocity -->   
-      0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0, 0, 0, 0, 0,   <!-- Y velocity -->
+      0, 0, 0, 0, 0, 1e-2, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Yaw -->
+      0, 0, 0, 0, 0, 0, 5e-1, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- X velocity -->   
+      0, 0, 0, 0, 0, 0, 0, 5e-1, 0, 0, 0, 0, 0, 0, 0,   <!-- Y velocity -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Z velocity -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll velocity -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch velocity -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0,   <!-- Yaw velocity -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0,   <!-- X acceleration -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0,   <!-- Y acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1.5, 0, 0, 0,   <!-- Yaw velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-5, 0, 0,   <!-- X acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-5, 0,   <!-- Y acceleration -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Z acceleration -->
     </rosparam>
 
@@ -110,7 +110,7 @@
     <param name="pose0_relative" value="false" />
     <param name="pose0_queue_size" value="10" />
     <param name="pose0_rejection_threshold" value="2" />
-    <param name="pose0_twist_covariance" value="false" />
+    <param name="pose0_twist_covariance" value="true" />
   </node>
 
   <!-- Add Hector Trajectory Server to visualize the path -->
