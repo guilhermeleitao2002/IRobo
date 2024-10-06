@@ -32,7 +32,7 @@ class TransformHandler:
 
     def get_transform(self, fixed_frame, target_frame):
         # Caller should handle the exceptions
-        return self.tf_buffer.lookup_transform(target_frame, fixed_frame, rospy.Time(0), rospy.Duration(1.0))  # 1 second timeout
+        return self.tf_buffer.lookup_transform(target_frame, fixed_frame, rospy.Time(0), rospy.Duration(5.0))  # 1 second timeout
 
 def get_errors(transform):
     tr = transform.transform.translation
