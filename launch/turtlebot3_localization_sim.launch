@@ -19,7 +19,7 @@
 
   <!-- ekf_localization_node -->
   <node pkg="robot_localization" type="ekf_localization_node" name="robot_localization_ekf_node_odom" clear_params="true">
-    <param name="frequency" value="10." />
+    <param name="frequency" value="50." />
     <param name="sensor_timeout" value="0.2" />
     <param name="two_d_mode" value="true" />
     <param name="publish_tf" value="true" />
@@ -55,6 +55,23 @@
     <param name="imu0_relative" value="true"/>
     <param name="imu0_differential" value="false"/>
 
+    <rosparam param="initial_estimate_covariance">
+      [1e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- X position -->
+      0, 1e-9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Y position -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Z position -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Yaw -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- X velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Y velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Z velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Yaw velocity -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- X acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Y acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Z acceleration -->
+    </rosparam>
     <rosparam param="process_noise_covariance">
       [1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  <!-- X position -->
       0, 1e-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,   <!-- Y position -->
@@ -68,8 +85,8 @@
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Roll velocity -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Pitch velocity -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0, 0,   <!-- Yaw velocity -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- X acceleration -->
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,      <!-- Y acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0, 0,   <!-- X acceleration -->
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1e-1, 0,   <!-- Y acceleration -->
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]      <!-- Z acceleration -->
     </rosparam>
 
@@ -102,16 +119,16 @@
     <param name="source_frame_name" value="base_scan" />
     <param name="target_frame_name" value="map" />
     <remap from="/trajectory" to="/trajectory_base_scan" />    
-    <param name="trajectory_update_rate" value="30.0" />
-    <param name="trajectory_publish_rate" value="30.0" />
+    <param name="trajectory_update_rate" value="10.0" />
+    <param name="trajectory_publish_rate" value="10.0" />
   </node>
   <!-- Trajectory for ground truth data -->
   <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="ground_truth_trajectory_server">
     <param name="source_frame_name" value="mocap_laser_link" />
     <param name="target_frame_name" value="map" />
     <remap from="/trajectory" to="/trajectory_mocap_laser_link" />
-    <param name="trajectory_update_rate" value="30.0" />
-    <param name="trajectory_publish_rate" value="30.0" />
+    <param name="trajectory_update_rate" value="10.0" />
+    <param name="trajectory_publish_rate" value="10.0" />
   </node>
 
   <!-- static tf publisher for ground truth -->
@@ -122,6 +139,9 @@
 
   <!-- run error script -->
   <node pkg="irobo" type="calculate_error.py" name="calculate_error" output="screen"/>
+
+  <!-- run uncertainty script -->
+  <node pkg="irobo" type="calculate_uncertainty.py" name="calculate_uncertainty" output="screen"/>
 
   <!-- rviz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find irobo)/rviz/turtlebot3_visualize_localization_sim.rviz"/>

@@ -2,7 +2,6 @@
 import rospy
 import tf2_ros
 from geometry_msgs.msg import TransformStamped
-import time  # for sleep
 
 def main():
     rospy.init_node('tf2_mocap_to_odom')
@@ -29,8 +28,8 @@ def main():
 
         br.sendTransform(t)
         
-        # Add a small sleep to avoid redundant timestamps
-        rospy.sleep(0.01)  # Adjust the sleep duration as needed
+        # Add a small sleep to avoid redundant timestamps warning
+        rospy.sleep(1e-9)
 
 if __name__ == '__main__':
     try:
