@@ -85,7 +85,7 @@ def main():
             num_uncertainty += 1
 
             # if previous_covariance_2 <= previous_covariance_1 and previous_covariance_1 >= uncertainty:
-            #     uncertainty_list.append(previous_covariance_1 * 1e3)  # Uncertainty in mm
+            #     uncertainty_list.append(previous_covariance_1)  # Uncertainty in m
             #     last_covariance_published = previous_covariance_1
             # else:
             #     uncertainty_list.append(last_covariance_published * 1e3)
@@ -93,7 +93,7 @@ def main():
             # previous_covariance_2 = previous_covariance_1
             # previous_covariance_1 = uncertainty
 
-            uncertainty_list.append(uncertainty * 1e3)  # Uncertainty in mm
+            uncertainty_list.append(uncertainty)  # Uncertainty in m
 
             # Update the uncertainty plot live
             update_uncertainty_plot(line_uncertainty, ax_uncertainty)
@@ -106,8 +106,8 @@ def main():
     finally:
         # After shutdown, print average uncertainty and show final plot
         if num_uncertainty > 0:
-            avg_uncertainty = (sum_uncertainty / num_uncertainty) * 1e3  # Convert to mm
-            print(f'Average uncertainty (in mm): {avg_uncertainty:.2f}')
+            avg_uncertainty = (sum_uncertainty / num_uncertainty)
+            print(f'Average uncertainty (in m): {avg_uncertainty:.2f}')
         else:
             print('No uncertainty data collected.')
 
