@@ -60,12 +60,12 @@ def main():
     # Setup live plotting for Uncertainty
     plt.ion()  # Enable interactive mode for Uncertainty Plot
     fig_uncertainty, ax_uncertainty = plt.subplots()
-    line_uncertainty, = ax_uncertainty.plot([], [], label="Uncertainty (mm)", color='red')  # Initialize plot for uncertainty
+    line_uncertainty, = ax_uncertainty.plot([], [], label="Uncertainty (m)", color='red')  # Initialize plot for uncertainty
 
     # Set up Uncertainty plot labels and grid
     ax_uncertainty.set_title('Uncertainty Over Time')
     ax_uncertainty.set_xlabel('Messages Received')
-    ax_uncertainty.set_ylabel('Uncertainty (mm)')
+    ax_uncertainty.set_ylabel('Uncertainty (m)')
     ax_uncertainty.grid(True)
     ax_uncertainty.legend()
 
