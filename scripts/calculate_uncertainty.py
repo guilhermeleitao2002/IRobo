@@ -25,7 +25,7 @@ def get_covariance(data):
     var_y = covariance_matrix[7]  # Diagonal element for y
 
     # Compute the uncertainty as the square root of the sum of variances
-    uncertainty = np.sqrt(var_x^2 + var_y^2)
+    uncertainty = np.sqrt(var_x**2 + var_y**2)
 
     return uncertainty
 
