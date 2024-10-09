@@ -12,9 +12,6 @@ rospy.sleep(7)  # To ensure that it starts only when the robot starts moving
 # Initialize global variables
 sum_uncertainty = 0.0
 num_uncertainty = 0
-previous_covariance_1 = 0
-previous_covariance_2 = 0
-last_covariance_published = 0
 
 # List to store uncertainties for plotting
 uncertainty_list = []
@@ -23,12 +20,14 @@ def get_covariance(data):
     # Access the covariance matrix
     covariance_matrix = data.pose.covariance
 
-    # Extract the relevant variance element for the x dimension (index 0)
+    # Extract the relevant variance element for the x and y dimensions
     var_x = covariance_matrix[0]  # Diagonal element for x
+    var_y = covariance_matrix[7]  # Diagonal element for y
 
-    # Calculate the standard deviation (uncertainty) for x
-    uncertainty_x = np.sqrt(var_x)
-    return uncertainty_x
+    # Compute the uncertainty as the square root of the sum of variances
+    uncertainty = np.sqrt(var_x^2 + var_y^2)
+
+    return uncertainty
 
 def update_uncertainty_plot(line_uncertainty, ax_uncertainty):
     line_uncertainty.set_xdata(range(len(uncertainty_list)))
@@ -44,7 +43,7 @@ def update_uncertainty_plot(line_uncertainty, ax_uncertainty):
     plt.pause(0.01)  # Short pause to allow the plot to update
 
 def main():
-    global sum_uncertainty, num_uncertainty, previous_covariance_1, previous_covariance_2, last_covariance_published
+    global sum_uncertainty, num_uncertainty
 
     rospy.init_node('uncertainty_evaluation_node')
 
@@ -83,15 +82,6 @@ def main():
             uncertainty = get_covariance(odom_msg)
             sum_uncertainty += uncertainty
             num_uncertainty += 1
-
-            # if previous_covariance_2 <= previous_covariance_1 and previous_covariance_1 >= uncertainty:
-            #     uncertainty_list.append(previous_covariance_1)  # Uncertainty in m
-            #     last_covariance_published = previous_covariance_1
-            # else:
-            #     uncertainty_list.append(last_covariance_published * 1e3)
-            
-            # previous_covariance_2 = previous_covariance_1
-            # previous_covariance_1 = uncertainty
 
             uncertainty_list.append(uncertainty)  # Uncertainty in m
 
